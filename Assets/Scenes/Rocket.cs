@@ -35,6 +35,11 @@ public class Rocket : MonoBehaviour
             Thrust();
             Rotate();
         }
+
+        if (Debug.isDebugBuild)
+        {
+            //do Debug Input
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -68,7 +73,12 @@ public class Rocket : MonoBehaviour
 
     private void LoadNextScene()
     {
-        SceneManager.LoadScene(1);
+        int SceneIndex = SceneManager.GetActiveScene().buildIndex;
+        if (SceneIndex == SceneManager.sceneCountInBuildSettings)
+        {
+            SceneIndex = 0;
+        }
+        SceneManager.LoadScene(SceneIndex + 1);
     }
 
     private void LoadFirstScene()
@@ -79,7 +89,7 @@ public class Rocket : MonoBehaviour
     private void Rotate()
     {
         rigidbody.freezeRotation = true;
-
+ 
 
         if (Input.GetKey(KeyCode.A))
         {
@@ -97,7 +107,7 @@ public class Rocket : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            rigidbody.AddRelativeForce(Vector3.up * thrustspeed );
+            rigidbody.AddRelativeForce(Vector3.up * thrustspeed);
             if (!audioSource.isPlaying)
             {
                 audioSource.PlayOneShot(main);
